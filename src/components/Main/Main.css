@@ -1,0 +1,21 @@
+.header-search-wrapper {
+    background-image: url("../../images/header-background.jpg");
+    max-width: 100%;
+    width: 100%;
+    min-height: 576px;
+    background-size: cover;
+}
+
+@media all and (max-width: 800px) {
+    .header-search-wrapper {
+        background-image: url("../../images/header-background_tablet.jpg");
+        min-height: 400px;
+    }
+}
+
+@media all and (max-width: 570px) {
+    .header-search-wrapper {
+        background-image: url("../../images/header-background_mobile.jpg");
+        min-height: 536px;
+    }
+}

@@ -1,0 +1,103 @@
+.login-button {
+    position: relative;
+    top: 0;
+    right: 0;
+    border-radius: 100px;
+    background-color: transparent;
+    padding: 11px 17px;
+}
+
+.login-button_type_main {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+}
+
+.login-button_type_main:hover {
+    opacity: 0.5;
+}
+
+.login-button_active {
+    padding: 10px 42px 10px 12px;
+}
+
+.login-button_active::after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    right: 9px;
+    width: 24px;
+    height: 24px;
+    background-image: url("../../images/logout_main.svg");
+    background-repeat: no-repeat;
+}
+
+.login-button_type_saved-news {
+    border: 1px solid #D1D2D6;
+    color: #1A1B22;
+}
+
+.login-button_type_saved-news:hover {
+    border: 1px solid #1A1B22;
+}
+
+.login-button_type_saved-news::after {
+    content: "";
+    position: absolute;
+    top: 9px;
+    right: 13px;
+    width: 24px;
+    height: 24px;
+    background-image: url("../../images/logout_saved.svg");
+    background-repeat: no-repeat;
+}
+
+@media all and (max-width: 780px) {
+    .button {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .login-button {
+        padding: 8px 12px;
+    }
+
+    .login-button_active {
+        padding: 7px 42px 8px 11px;
+    }
+
+    .login-button_active::after {
+        top: 11px;
+        right: 7px;
+    }
+
+    .login-button_type_saved-news::after {
+        top: 7px;
+        right: 12px;
+    }
+}
+
+@media all and (max-width: 570px) {
+    .button {
+        font-size: 18px;
+        line-height: 1.33;
+    }
+
+    .login-button {
+        min-width: 100%;
+        padding: 15px 11px 17px;
+    }
+
+    .login-button_active {
+        padding: 15px 42px 17px 11px;
+    }
+
+    .login-button_active::after {
+        top: 19px;
+        right: 9px;
+    }
+
+    .login-button_type_saved-news::after {
+        top: 15px;
+        right: 13px;
+    }
+}
