@@ -1,0 +1,112 @@
+.news-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 104px;
+    background-color: #F5F6F7;
+}
+
+.news-cards_type_saved-news {
+    padding: 62px 104px;
+}
+
+.news-cards__title {
+    display: none;
+    margin: 0 0 64px;
+    padding: 0;
+    font-family: 'Roboto-Slab', Arial, sans-serif;
+    font-size: 40px;
+    line-height: 1.15;
+    font-weight: 400;
+    color: #1A1B22;
+    align-self: flex-start;
+}
+
+.news-cards__title_active {
+    display: block;
+}
+
+.news-cards__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    grid-auto-rows: 576px;
+    gap: 16px;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+}
+
+.news-cards__button {
+    display: none;
+    padding: 20px 84px;
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 80px;
+    font-style: normal;
+    align-items: center;
+    text-align: center;
+    margin: 64px 0 0;
+}
+
+.news-cards__button:hover {
+    opacity: 0.9;
+}
+
+.news-cards__button_active {
+    display: block;
+}
+
+@media all and (max-width: 780px) {
+    .news-cards {
+        padding: 40px;
+    }
+
+    .news-cards_type_saved-news {
+        padding: 32px 40px;
+    }
+
+    .news-cards__title {
+        margin: 0 0 32px;
+        font-size: 30px;
+        line-height: 1.13;
+    }
+
+    .news-cards__list {
+        grid-template-columns: repeat(auto-fill, 224px);
+        grid-auto-rows: 420px;
+        gap: 8px;
+    }
+
+    .news-cards__button {
+        padding: 16px 60px;
+        margin: 32px 0 0;
+    }
+}
+
+@media all and (max-width: 570px) {
+    .news-cards {
+        padding: 32px 16px;
+    }
+
+    .news-cards_type_saved-news {
+        padding: 24px 16px;
+    }
+
+    .news-cards__title {
+        margin: 0 0 24px;
+        min-height: 68px;
+    }
+
+    .news-cards__list {
+        grid-template-columns: repeat(auto-fill, 288px);
+        grid-auto-rows: 440px;
+        gap: 10px;
+    }
+
+    .news-cards__button {
+        padding: 16px 84px;
+        margin: 16px 0 0;
+    }
+}

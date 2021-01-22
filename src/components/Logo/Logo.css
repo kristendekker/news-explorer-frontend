@@ -1,0 +1,32 @@
+.logo {
+    background-repeat: no-repeat;
+    background-size: contain;
+    min-width: 138px;
+    min-height: 24px;
+}
+
+.logo__link {
+    display: block;
+    max-width: 138px;
+    min-height: 24px;
+}
+
+.logo_type_main {
+    background-image: url('../../images/logo_main.svg');
+}
+
+.logo_type_saved-news {
+    background-image: url('../../images/logo_saved.svg');
+}
+
+@media all and (max-width: 570px) {
+    .logo {
+        min-width: 117px;
+        min-height: 24px;
+    }
+
+    .logo__link {
+        max-width: 117px;
+        min-height: 24px;
+    }
+}
