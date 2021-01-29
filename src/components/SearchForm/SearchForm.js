@@ -1,45 +1,29 @@
-import React from 'react';
+import React from "react";
 import './SearchForm.css';
 
-function SearchForm({ onSearchArticles, onResultNews }) {
-
-    const [request, setRequest] = React.useState('');
-    const [error, setError] = React.useState(false);
-
-
-    function handleInputSearchChange(evt) {
-        setError(false);
-        setRequest(evt.target.value);
-    }
-
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-
-        if (request !== '') {
-            onSearchArticles(request);
-            onResultNews();
-            setRequest('');
-        };
-    }
-
-    function showError() {
-        (request === '') ? setError(true) : setError(false);
-    }
-
+const SearchForm = ({ isOpen, searchInputValue, handleSearchInputChange, handleSearchSubmit, error, loading }) => {
     return (
-        <form className="searchForm" onSubmit={handleSubmit}>
-            <input
-                type="text"
-                className="searchForm__input"
-                onChange={handleInputSearchChange}
-                placeholder={`${error ? "" : "Введите тему новости"}`}
-                value={request}
-                required
-            />
-            <button type="submit" className="searchForm__button" onClick={showError}>Искать</button>
-            {error && <span className="searchPage__message-error">Нужно ввести ключевое слово</span>}
-        </form>
-    );
+        <section className={isOpen ? "search-form search-form_type_open" : "search-form"}>
+            <div className="search-form__container">
+                <h1 className="search-form__title">Что творится в мире?</h1>
+                <p className="search-form__subtitle">Находите самые свежие статьи на любую тему и сохраняйте в своём личном
+            кабинете.</p>
+                <form className="search-form__cover"
+                    noValidate
+                    onSubmit={handleSearchSubmit}>
+                    <input className="search-form__input"
+                        type="text"
+                        name="search"
+                        placeholder="Введите тему новости"
+                        required={true}
+                        onChange={handleSearchInputChange}
+                        value={searchInputValue} disabled={loading} />
+                    <span className={error}>Нужно ввести ключевое слово</span>
+                    <input className="button search-form__submit" type="submit" value="Искать" disabled={loading} />
+                </form>
+            </div>
+        </section>
+    )
 }
 
 export default SearchForm;

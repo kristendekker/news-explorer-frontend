@@ -1,0 +1,32 @@
+.error {
+    position: absolute;
+    top: 54px;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    color: #FF0000;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.21;
+}
+
+.error_type_search {
+    top: 62px;
+    left: 20px;
+    font-size: 14px;
+}
+
+.error_type_server {
+    opacity: 0;
+    display: block;
+    top: -20px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.error_active {
+    opacity: 1;
+}

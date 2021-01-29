@@ -1,58 +1,86 @@
-import { BASE_URL_MAIN } from './config';
+import { getToken } from "./token";
+import { BASE_URL } from '../auth';
 
-const getResponse = (res) => {
-    if (res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(res);
+class MainApi {
+    constructor({ baseUrl, headers }) {
+        this.baseUrl = baseUrl;
+        this.headers = headers;
     }
-};
 
-export const getCurrentUser = (token) => {
-    return fetch(`${BASE_URL_MAIN}/users/me`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-    })
-        .then(getResponse)
-};
+    getHeaders() {
+        const token = getToken();
 
-export const getArticles = (token) => {
-    return fetch(`${BASE_URL_MAIN}/articles`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-    })
-        .then(getResponse)
-};
-
-export const createArticle = (keyword, title, text, date, source, link, image, token) => {
-    return fetch(`${BASE_URL_MAIN}/articles`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ keyword, title, text, date, source, link, image })
-    })
-        .then(getResponse)
-};
-
-export const deleteArticle = (articleId, token) => {
-    return fetch(`${BASE_URL_MAIN}/articles/${articleId}`, {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+        return {
+            ...this.headers,
+            'Authorization': `Bearer ${token}`
         }
-    })
-        .then(getResponse)
-};
+    }
+
+    getUserInfo() {
+        return fetch(`${this.baseUrl}/users/me`, {
+            headers: this.getHeaders(),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(`Ошибка: ${res.status}`)
+            })
+    }
+
+    getArticles() {
+        return fetch(`${this.baseUrl}/articles`, {
+            headers: this.getHeaders(),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(`Ошибка: ${res.status}`)
+            })
+    }
+
+    createArticle(newArticle) {
+        return fetch(`${this.baseUrl}/articles`, {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body: JSON.stringify({
+                keyword: newArticle.keyword,
+                title: newArticle.title,
+                text: newArticle.text,
+                date: newArticle.date,
+                source: newArticle.source,
+                link: newArticle.link,
+                image: newArticle.image
+            })
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(`Ошибка: ${res.status}`)
+            })
+    }
+
+    deleteArticle(articleId) {
+        return fetch(`${this.baseUrl}/articles/${articleId}`, {
+            method: 'DELETE',
+            headers: this.getHeaders(),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(`Ошибка: ${res.status}`)
+            })
+    }
+}
+
+const mainApi = new MainApi({
+    baseUrl: BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    }
+})
+
+export default mainApi;

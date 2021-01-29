@@ -1,79 +1,50 @@
-import React from 'react';
+import React from "react";
 import './Main.css';
-import About from '../About/About';
-import NewsCardList from '../NewsCardList/NewsCardList';
-import SearchPage from '../SearchPage/SearchPage';
-import Preloader from '../Preloader/Preloader';
-import NotFound from '../NotFound/NotFound';
-import { SHOW_ARTICLES_ON_PAGE } from '../../utils/config';
+import Header from "../Header/Header";
+import SearchForm from "../SearchForm/SearchForm";
+import NewsCardList from "../NewsCardList/NewsCardList";
+import About from "../About/About";
+import Information from "../Information/Information";
 
-function Main({
-    pathname,
-    onSearchArticles,
-    onSavedArticles,
-    onDeleteSavedArticle,
-    savedArticleList,
-    articleList,
-    isOpenResultNews,
-    setIsOpenResultNews,
-    showArticlesOnPage,
-    setShowArticlesOnPage,
-    isLoading,
-    loggedIn,
-    onLogin,
-}) {
-
-    //открываем страницу с карточками, максимум 3-мя
-    function handleResultNews() {
-        setIsOpenResultNews(true);
-        setShowArticlesOnPage(SHOW_ARTICLES_ON_PAGE);
-    }
-
-    //паказать еще
-    function handleShowMoreArticles() {
-        setShowArticlesOnPage(showArticlesOnPage + SHOW_ARTICLES_ON_PAGE);
-    }
-
-    React.useEffect(() => {
-        if (articleList.length === 0) {
-            setIsOpenResultNews(false);
-        }
-        // eslint-disable-next-line
-    }, [pathname]);
-
+const Main = ({ isOpen,
+    onLoginPopupOpen,
+    handleToggleMenuClick,
+    loggedIn, onClose,
+    isPopupOpen, loading, articles,
+    handleSearchInputChange,
+    handleSearchSubmit,
+    searchInputValue,
+    searchError, getNewsError,
+    onSignOut, onRegisterPopupOpen, onRemoveCallback, onAddCallback
+}) => {
     return (
-        < >
-            <main className="main">
-                <SearchPage
-                    onSearchArticles={onSearchArticles}
-                    onResultNews={handleResultNews}
+        <>
+            <div className="header-search-wrapper">
+                <Header
+                    isOpen={isOpen}
+                    handleToggleMenuClick={handleToggleMenuClick}
+                    loggedIn={loggedIn}
+                    onClose={onClose}
+                    onLoginPopupOpen={onLoginPopupOpen}
+                    isPopupOpen={isPopupOpen}
+                    onSignOut={onSignOut}
+                    isMain={true}
                 />
-                {isLoading && <Preloader />}
-                {
-                    isOpenResultNews
-                    && (
-                        articleList.length !== 0
-                            ?
-                            <NewsCardList
-                                pathname={pathname}
-                                articleList={articleList}
-                                onSavedArticles={onSavedArticles}
-                                onDeleteSavedArticle={onDeleteSavedArticle}
-                                savedArticleList={savedArticleList}
-                                isOpenResultNews={isOpenResultNews}
-                                loggedIn={loggedIn}
-                                onLogin={onLogin}
-                                onShowMoreArticles={handleShowMoreArticles}
-                                showArticlesOnPage={showArticlesOnPage}
-                            />
-                            :
-                            <NotFound />
-                    )
-                }
+                <SearchForm
+                    isOpen={isOpen}
+                    handleSearchInputChange={handleSearchInputChange}
+                    handleSearchSubmit={handleSearchSubmit}
+                    searchInputValue={searchInputValue}
+                    error={searchError}
+                    loading={loading}
+                />
+            </div>
+            <main className="main">
+                {!loading && articles && articles.length ? <NewsCardList articles={articles} getNewsError={getNewsError} loading={loading} loggedIn={loggedIn} isMain={true} onRegisterPopupOpen={onRegisterPopupOpen} onRemoveCallback={onRemoveCallback} onAddCallback={onAddCallback} /> : <Information articles={articles} isMain={true} loading={loading} />}
                 <About />
             </main>
-        </ >
-    );
+        </>
+    )
 }
 
-export default Main; 
+export default Main;

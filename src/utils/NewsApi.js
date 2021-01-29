@@ -1,25 +1,27 @@
-import {
-    BASE_URL_PROXY,
-    API_KEY,
-    DATE_TO,
-    DATE_FROM,
-    PAGE_SIZE,
-} from './config';
+class NewsApi {
+    constructor({ baseUrl, headers }) {
+        this.baseUrl = baseUrl;
+        this.headers = headers;
+    }
 
+    getNews(keyword, nowDate, lastDate) {
+        return fetch(`${this.baseUrl}?q=${keyword}&language=ru&from=${lastDate}&to=${nowDate}&sortBy=publishedAt&pageSize=100&apiKey=933e121e7cc34cc3aa7e80a6123a62e0`, {
+            headers: this.headers,
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(`Ошибка: ${res.status}`)
+            })
+    }
+}
 
-export const getNewsArticles = (request) => {
+const newsApi = new NewsApi({
+    baseUrl: 'https://nomoreparties.co/news/v2/everything',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+})
 
-    return fetch(`${BASE_URL_PROXY}?q=${request}&apiKey=${API_KEY}&from=${DATE_FROM}&to=${DATE_TO}&pageSize=${PAGE_SIZE}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(new Error("Что-то пошло не так"));
-        });
-};
+export default newsApi;

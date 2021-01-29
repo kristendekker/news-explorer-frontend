@@ -1,26 +1,57 @@
-import React from 'react';
-import './SavedNews.css';
-import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
-import NewsCardList from '../NewsCardList/NewsCardList';
+import React from "react";
+import Header from "../Header/Header";
+import NewsCardList from "../NewsCardList/NewsCardList";
+import SavedNewsHeader from "../SavedNewsHeader/SavedNewsHeader";
+import Information from "../Information/Information";
+import mainApi from "../../utils/MainApi";
 
-function SavedNews({
-    pathname,
+const SavedNews = ({
+    isOpen,
+    handleToggleMenuClick,
+    onLoginPopupOpen,
     loggedIn,
-    currentUser,
-    savedArticleList,
-    onDeleteSavedArticle
-}) {
+    onClose,
+    onSignOut,
+    loading,
+    onRemoveCallback
+}) => {
+    const [userArticles, setUserArticles] = React.useState([]);
+
+    const onRemove = (articleId) => {
+        const articlesAfterDelete = userArticles.filter((a) => a._id !== articleId);
+        setUserArticles(articlesAfterDelete)
+        if (onRemoveCallback !== undefined) {
+            onRemoveCallback(articleId)
+        }
+    }
+
+    React.useEffect(() => {
+        mainApi.getArticles()
+            .then((articles) => {
+                setUserArticles(articles)
+            })
+            .catch((err) => {
+                console.log(`${err}`);
+            });
+    }, []);
+
+
     return (
-        <main className="savedNews">
-            <SavedNewsHeader savedArticleList={savedArticleList} currentUser={currentUser} />
-            <NewsCardList
-                pathname={pathname}
+        <>
+            <Header
+                isOpen={isOpen}
+                handleToggleMenuClick={handleToggleMenuClick}
                 loggedIn={loggedIn}
-                savedArticleList={savedArticleList}
-                onDeleteSavedArticle={onDeleteSavedArticle}
+                onClose={onClose}
+                onLoginPopupOpen={onLoginPopupOpen}
+                onSignOut={onSignOut}
+                isMain={false}
             />
-        </main>
-    );
+            <SavedNewsHeader userArticles={userArticles} />
+            {!userArticles.length ? <Information loading={loading} isMain={false} userArticles={userArticles} /> :
+                <NewsCardList articles={userArticles} onRemoveCallback={onRemove} isMain={false} />}
+        </>
+    )
 }
 
 export default SavedNews;

@@ -1,22 +1,8 @@
-import React from 'react';
-import { Route, Redirect, useLocation } from "react-router-dom";
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, ...props }) => {
-    const { pathname } = useLocation();
-
-    React.useEffect(() => {
-        if (!props.loggedIn && pathname === "/saved-news")
-            props.onChangePopup();
-            // eslint-disable-next-line
-    }, [pathname]);
-
-    return (
-        <Route>
-            {
-                () => props.loggedIn ? <Component {...props} /> : <Redirect to="/" />
-            }
-        </Route>
-    )
+const ProtectedRoute = ({ loggedIn, ...routeProps }) => {
+    return loggedIn ? <Route {...routeProps} /> : <Redirect to="./" />
 }
 
 export default ProtectedRoute;

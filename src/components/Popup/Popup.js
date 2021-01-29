@@ -1,53 +1,54 @@
-import React from 'react';
+import React from "react";
 import './Popup.css';
 
-function Popup({
-    isOpen,
-    onClose,
-    onChangePopup,
-    onInfoTooltip,
-    onSubmit,
-    title,
-    buttonName,
-    linkName,
-    isDisabled,
-    messageError,
-    messageErrorReset,
-    children
-}) {
+const Popup = ({ name, isOpen, onClose, title, children, onLoginPopupOpen, onRegisterPopupOpen }) => {
+    const handleEscapeClose = (event) => {
+        if (event.key === 'Escape') {
+            onClose();
+        }
+    };
 
     React.useEffect(() => {
-        setTimeout(messageErrorReset, 2000);
+        document.addEventListener("keydown", handleEscapeClose, false);
+
+        return () => {
+            document.removeEventListener("keydown", handleEscapeClose, false);
+        };
         // eslint-disable-next-line
-    }, [messageError]);
+    }, [isOpen]);
+
+    const handleOverlayClose = (event) => {
+        if (event.target === event.currentTarget && isOpen) {
+            onClose();
+        }
+    };
+
+    const handleRedirectionPath = () => {
+        if (name !== "login") {
+            onClose();
+            onLoginPopupOpen();
+        } else {
+            onClose();
+            onRegisterPopupOpen();
+        }
+    }
 
     return (
-        < >
-            <div className={`popup ${isOpen && "popup_opened"}`}>
-                <form className="popup__form" onSubmit={onSubmit}>
-                    <button type="button" className="popup__button-close" onClick={onClose} />
-                    <h2 className="popup__title">{title}</h2>
-                    {children}
-                    <div className="popup__container">
-                        <span className="popup__messageError">{messageError}</span>
-                        <button
-                            type="submit"
-                            className={`popup__button ${isDisabled && "popup__button_disabled"}`}
-                            disabled={isDisabled}
-                            onClick={messageError ? onInfoTooltip : null}
-                        >
-                            {buttonName}
-                        </button>
-                    </div>
-                    <p className="popup__text">или&nbsp;
-            <span className="popup____text-link" onClick={onChangePopup}>
-                            {linkName}
-                        </span>
-                    </p>
-                </form>
+        <section
+            className={isOpen ? `popup popup_type_${name} popup_opened` : `popup popup_type_${name}`}
+            onMouseUp={handleOverlayClose}>
+            <div className={name === "success" ? "popup__container popup__container_type_success" : "popup__container"}>
+                <button className="hover-effect popup__close" type="button" onClick={onClose} />
+                <h2 className={name === "success" ? "popup__title popup__title_type_success" : "popup__title"}>{title}</h2>
+                {children}
+                <span
+                    className={name === "success" ? "popup__redirection popup__redirection_type_success" : "popup__redirection"}>{name === "success" ? "" : "или "}
+                    <span className="popup__redirection-path"
+                        onClick={handleRedirectionPath}>{(name !== "login") ? "Войти" : "Зарегистрироваться"}</span>
+                </span>
             </div>
-        </ >
+        </section>
     );
 }
 
-export default Popup; 
+export default Popup;

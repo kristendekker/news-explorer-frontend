@@ -1,82 +1,48 @@
-import React from 'react';
+import React from "react";
 import './SavedNewsHeader.css';
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function SavedNewsHeader({ savedArticleList, currentUser }) {
-    const [savedKeywords, setSavedKeywords] = React.useState([]);
+const SavedNewsHeader = ({ userArticles }) => {
+    const currentUser = React.useContext(CurrentUserContext);
+    const keywords = userArticles ? Array.from(userArticles, ({ keyword }) => keyword) : [];
 
-    React.useEffect(() => {
+    const keywordsCount = {};
+    let keywordsUniq = [];
+    for (let length = keywords.length, i = length; --i >= 0;) {
+        if (!keywordsUniq.includes(keywords[i])) {
+            keywordsUniq.push(keywords[i]);
+        }
+        if (keywordsCount[keywords[i]]) {
+            keywordsCount[keywords[i]] += 1;
+        } else {
+            keywordsCount[keywords[i]] = 1;
+        }
+    }
 
-        let startKeywords = savedArticleList.map(el => el.keyword);
-        let sortedObjects = [];
-        let sortedKeywords = [];
-        let finishedKeywords = [];
+    keywordsUniq.sort((a, b) => {
+        return keywordsCount[b] - keywordsCount[a];
+    });
 
-        //создаем массив объектов определяя колическтво повторов у каждого слова
-        for (let i = 0; i < startKeywords.length; i++) {
-            const obj = {
-                name: startKeywords[i],    // ключевые слова
-                reped: 0                   // количество повторяемых слов
-            };
-            sortedObjects.push(obj);
+    const isMoreThanThree = Object.keys(keywordsUniq).length > 3;
+    const allCount = keywordsUniq.length;
+    if (isMoreThanThree) {
+        keywordsUniq = keywordsUniq.slice(0, 2);
+    }
 
-            sortedObjects.forEach(el => {
-                if (el.name === startKeywords[i]) el.reped += 1;
-            })
-        };
-
-        //сортируем массив объектов по кол-ву повторяемых слов
-        sortedObjects.sort((a, b) => {
-            if (a.reped < b.reped) return 1;
-            if (a.reped > b.reped) return -1;
-            return 0;
-        });
-
-        //оставляем только ключ. слова
-        sortedKeywords = sortedObjects.map(el => el.name);
-
-        //убираем повторяемые слова
-        finishedKeywords = sortedKeywords.filter(function (item, pos) {
-            return sortedKeywords.indexOf(item) === pos;
-        });
-
-        setSavedKeywords(finishedKeywords);
-
-    }, [savedArticleList]);
+    keywordsUniq = keywordsUniq.map((k) => k[0].toUpperCase() + k.slice(1, k.length));
 
     return (
-        <section className="savedNewsHeader">
-            <h3 className="savedNewsHeader__subtitle">Сохранённые статьи</h3>
-            <h1 className="savedNewsHeader__title">
-                {currentUser.name ? currentUser.name : "Пользователь"}, у вас&nbsp;{savedArticleList.length}
-                {`${savedArticleList.length === 1 ? ' сохранённая статья' : ' сохранённых статей'}`}
-            </h1>
-            {savedKeywords.length === 0 && <span className="savedNewsHeader__keyword">&nbsp;</span>}
-            {
-                savedKeywords.length > 0 && <p className="savedNewsHeader__keywords-text"> По ключевым словам:&nbsp;
-            {savedKeywords.length === 1 &&
-                        <span className="savedNewsHeader__keyword">
-                            {savedKeywords[0]}
-                        </span>
-                    }
-                    {savedKeywords.length === 2 &&
-                        <span className="savedNewsHeader__keyword">
-                            {savedKeywords[0]}  и  {savedKeywords[1]}
-                        </span>
-                    }
-                    {savedKeywords.length === 3 &&
-                        <span className="savedNewsHeader__keyword">
-                            {savedKeywords[0]}, {savedKeywords[1]}  и  {savedKeywords[2]}
-                        </span>
-                    }
-                    {savedKeywords.length > 3 &&
-                        <span className="savedNewsHeader__keyword">
-                            {savedKeywords[0]}, {savedKeywords[1]} и {savedKeywords.length - 2}-м другим
+        <section className="saved-news__header">
+            <span className="saved-news__subtitle">Сохранённые статьи</span>
+            <h2 className="saved-news__title">{currentUser.name}, у
+        вас {userArticles.length ? userArticles.length : "пока нет"} сохранённых статей</h2>
+            <span
+                className="saved-news__keywords">По ключевым словам: <b>{isMoreThanThree ? keywordsUniq.join(", ") : (allCount === 3 ? `${keywordsUniq[0]}, ${keywordsUniq[1]} и ${keywordsUniq[2]}` : (allCount > 0 ? keywordsUniq.join(", ") : " ничего не найдено"))}</b> {isMoreThanThree ? ` и ` : ""}
+                <b>{isMoreThanThree ? `${allCount - 2}-м другим` : ""}</b>
             </span>
-                    }
-                </p>
-            }
         </section>
-    );
+    )
 }
+
 
 export default SavedNewsHeader;

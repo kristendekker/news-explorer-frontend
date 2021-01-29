@@ -15,7 +15,7 @@
 }
 
 .information__no-results {
-    /*background-image*/
+    background-image: url("../../images/not-found.svg");
     background-repeat: no-repeat;
     background-position: center;
     width: 96px;

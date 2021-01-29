@@ -1,67 +1,57 @@
-import React from 'react';
+import React from "react";
 import './Header.css';
-import { Link } from 'react-router-dom';
+import Logo from '../Logo/Logo';
 import Navigation from '../Navigation/Navigation';
+import SignOut from '../SignOut/SignOut';
+import Toggle from "../Toggle/Toggle";
 
-function Header({ onLogin, pathname, loggedIn, currentUser, onSignOut }) {
-
-    const [isOpenMenu, setIsOpenMenu] = React.useState(false);
-    const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
-    const [mobileActive, setMobileActive] = React.useState(false);
-
-    //открываем мобильное меню
-    function handleMenu() {
-        isOpenMenu ? setIsOpenMenu(false) : setIsOpenMenu(true);
+const Header = ({ isOpen, handleToggleMenuClick, loggedIn, onClose, isMain, onLoginPopupOpen, isPopupOpen, onSignOut }) => {
+    const handleHeaderClassNameClick = () => {
+        if (!isMain) {
+            return "header header_type_saved-news";
+        } else if (!isMain && isOpen) {
+            return "header header_type_overlay header_type_saved-news";
+        } else if (isMain && isOpen) {
+            return "header header_type_overlay header_type_main";
+        } else {
+            return "header header_type_main";
+        }
     }
 
-    //отслеживаем размеры экрана для изменения меню
-    React.useEffect(() => {
-        function resizeScreen(e) {
-            setScreenWidth(e.target.innerWidth);
+    const handleContainerClassNameClick = () => {
+        if (!isMain || (!isMain && isOpen)) {
+            return "header__container header__container_type_saved-news";
+        } else if (isMain && isOpen) {
+            return "header__container header__container_type_main";
+        } else {
+            return "header__container";
         }
-        window.addEventListener('resize', resizeScreen);
-        return () => {
-            window.removeEventListener('resize', resizeScreen);
-        }
-    }, [])
+    }
 
-    //меняем статус меню в зависимости от размеров экрана
-    React.useEffect(() => {
-        if (screenWidth <= 700) {
-            setMobileActive(true);
+    const handleCoverClassNameClick = () => {
+        if (!isMain && isOpen) {
+            return "header__cover header__cover_type_saved-news";
+        } else if (isMain && isOpen) {
+            return "header__cover header__cover_type_main";
+        } else {
+            return "header__cover";
         }
-        else {
-            setMobileActive(false);
-            setIsOpenMenu(false);
-        }
-    }, [screenWidth]);
-
-    //закрытие меню щелчком вне формы
-    React.useEffect(() => {
-        const handleMouseClose = (evt) => {
-            if (evt.target.classList.contains("navigationMobile")) {
-                setIsOpenMenu(false);
-            }
-        }
-        document.addEventListener("mousedown", handleMouseClose);
-        return () => document.removeEventListener("mousedown", handleMouseClose);
-    }, []);
+    }
 
     return (
-        <header className={`header ${isOpenMenu ? "header_mobile" : (pathname === "/saved-news" ? "header_saved-news" : "header_main")}`}>
-            <Link className={`header__logo ${(!isOpenMenu && (pathname === "/saved-news")) && "header__logo_saved-news"}`} to="/">NewsExplorer</Link>
-            <Navigation
-                onLogin={onLogin}
-                pathname={pathname}
-                isOpenMenu={isOpenMenu}
-                onHandleMenu={handleMenu}
-                mobileActive={mobileActive}
-                loggedIn={loggedIn}
-                currentUser={currentUser}
-                onSignOut={onSignOut}
-            />
+        <header className={handleHeaderClassNameClick()}>
+            <div className={handleContainerClassNameClick()}>
+                <div className="header__unite">
+                    <Logo isMain={isMain} />
+                    <Toggle isOpen={isOpen} handleToggleMenuClick={handleToggleMenuClick} isPopupOpen={isPopupOpen} isMain={isMain} />
+                </div>
+                <div className={handleCoverClassNameClick()}>
+                    <Navigation loggedIn={loggedIn} onClose={onClose} isMain={isMain} />
+                    <SignOut loggedIn={loggedIn} onLoginPopupOpen={onLoginPopupOpen} onClose={onClose} onSignOut={onSignOut} isMain={isMain} />
+                </div>
+            </div>
         </header>
-    );
+    )
 }
 
 export default Header;

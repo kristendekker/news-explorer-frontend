@@ -1,0 +1,113 @@
+.card-button {
+    display: block;
+    position: absolute;
+    background-image: url('../../images/mark.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    top: 24px;
+    right: 24px;
+    border: none;
+    width: 40px;
+    height: 40px;
+    z-index: 5;
+}
+
+.card-button_type_saved-news {
+    background-image: url('../../images/trash.svg');
+}
+
+.card-button_loading {
+    transform: scale(1.5);
+
+}
+
+.card-button__message {
+    display: none;
+    position: absolute;
+    background-color: #FFFFFF;
+    box-shadow: 0 10px 22px rgba(59, 74, 116, 0.1);
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 1.2;
+    top: 24px;
+    right: 69px;
+    padding: 14px 12px;
+    z-index: 5;
+}
+
+.card-button__message_type_saved-news {
+    font-size: 12px;
+    line-height: 1.17;
+}
+
+.card-button:disabled {
+    background-color: white;
+}
+
+.card-button:hover {
+    background-image: url('../../images/mark-hover.svg');
+}
+
+.card-button_type_saved-news:hover {
+    background-image: url('../../images/trash-hover.svg');
+}
+
+.card-button:hover + .card-button__message {
+    display: block;
+}
+
+.card-button:hover + .card-button__message_disabled {
+    display: none;
+}
+
+.card-button:active {
+    background-image: url('../../images/mark-active.svg');
+}
+
+.card-button_clicked {
+    background-image: url('../../images/mark-active.svg');
+}
+
+.card-button_clicked:hover {
+    background-image: url('../../images/mark-active.svg');
+}
+
+.card-button_clicked:active{
+    background-image: url('../../images/mark-hover.svg');
+}
+
+.card-button_type_saved-news:active {
+    background-image: url('../../images/trash-active.svg');
+}
+
+.card-button:active + .card-button__message {
+    display: none;
+}
+
+@media all and (max-width: 780px) {
+    .card-button {
+        top: 8px;
+        right: 8px;
+    }
+
+    .card-button:hover {
+        background-image: url('../../images/mark.svg');
+    }
+
+    .card-button_type_saved-news:hover {
+        background-image: url('../../images/trash.svg');
+    }
+
+    .card-button:hover + .card-button__message {
+        display: none;
+    }
+}
+
+@media all and (max-width: 570px) {
+    .card-button {
+        top: 16px;
+        right: 16px;
+    }
+}
